@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexoria | Hayvan Takip Sistemi</title>
+    <!-- Stil ve İkon Kütüphaneleri -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        
+        body { 
+            background-color: #0b0f1a; 
+            color: #e2e8f0; 
+            font-family: 'Inter', sans-serif; 
+        }
+        
+        /* Cam Kart Efekti */
+        .glass-card { 
+            background: rgba(30, 41, 59, 0.7); 
+            backdrop-filter: blur(12px); 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            border-radius: 1.25rem; 
+        }
+        
+        /* Neon Parlama */
+        .neon-border { 
+            border: 1px solid #38bdf8; 
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.2); 
+        }
+        
+        .status-dot { 
+            height: 10px; 
+            width: 10px; 
+            border-radius: 50%; 
+            display: inline-block; 
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(34, 197, 94, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+        }
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-10">
+
+    <!-- Üst Menü / Navbar -->
+    <nav class="flex justify-between items-center mb-10 glass-card p-5 neon-border">
+        <div class="flex items-center gap-4">
+            <i class="fas fa-microchip text-sky-400 text-3xl"></i>
+            <div>
+                <h1 class="text-xl font-black tracking-widest text-white leading-none">NEXORIA</h1>
+                <span class="text-[10px] text-sky-400 font-bold uppercase tracking-[0.3em]">Smart Agriculture</span>
+            </div>
+        </div>
+        
+        <div class="flex items-center gap-6">
+            <div class="hidden md:flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-gray-400">
+                <span class="status-dot bg-green-500"></span>
+                Sistem Aktif
+            </div>
+            <!-- Google Giriş Simülasyonu -->
+            <div class="flex items-center gap-3 bg-slate-800/80 px-4 py-2 rounded-full border border-slate-700 hover:border-sky-500 transition cursor-pointer">
+                <i class="fab fa-google text-red-400 text-lg"></i>
+                <span class="text-sm font-semibold text-white">Bilge</span>
+                <img src="https://ui-avatars.com/api/?name=Bilge&background=38bdf8&color=fff" class="w-6 h-6 rounded-full" alt="User">
+            </div>
+        </div>
+    </nav>
+
+    <!-- Ana Panel Izgarası -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <!-- Sol Taraf: Canlı İzleme ve Veriler -->
+        <div class="lg:col-span-2 space-y-8">
+            
+            <!-- Canlı Okuma Kartı -->
+            <div class="glass-card p-10 relative overflow-hidden neon-border bg-gradient-to-br from-slate-800/50 to-transparent">
+                <div class="flex justify-between items-start mb-10">
+                    <div>
+                        <p class="text-sky-400 text-xs font-black tracking-[0.2em] mb-2">CANLI RFID VERİSİ</p>
+                        <h2 id="rfid-id" class="text-6xl font-mono font-black text-white">#123456</h2>
+                    </div>
+                    <div class="bg-sky-500/10 p-4 rounded-2xl border border-sky-500/30">
+                        <i class="fas fa-rss text-sky-400 text-4xl animate-pulse"></i>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-10">
+                    <!-- Ağırlık Kartı -->
+                    <div class="bg-slate-900/80 p-8 rounded-2xl border border-slate-800 hover:border-sky-500/50 transition">
+                        <div class="flex items-center gap-3 mb-4 text-gray-400 font-bold uppercase text-xs">
+                            <i class="fas fa-weight-hanging text-sky-400 text-lg"></i>
+                            Hayvan Ağırlığı
+                        </div>
+                        <div class="flex items-baseline gap-2">
+                            <span id="kg-val" class="text-5xl font-black text-white">685</span>
+                            <span class="text-xl text-gray-500 font-bold">KG</span>
+                        </div>
+                    </div>
+                    <!-- Sıcaklık Kartı -->
+                    <div class="bg-slate-900/80 p-8 rounded-2xl border border-slate-800 hover:border-orange-500/50 transition">
+                        <div class="flex items-center gap-3 mb-4 text-gray-400 font-bold uppercase text-xs">
+                            <i class="fas fa-temperature-high text-orange-400 text-lg"></i>
+                            Vücut Isısı
+                        </div>
+                        <div class="flex items-baseline gap-2">
+                            <span id="temp-val" class="text-5xl font-black text-white">38.9</span>
+                            <span class="text-xl text-gray-500 font-bold">°C</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Geçmiş Veri Tablosu -->
+            <div class="glass-card p-8">
+                <h3 class="text-xl font-black mb-6 flex items-center gap-3 text-white">
+                    <i class="fas fa-list-ul text-sky-500"></i> SON İŞLEMLER
+                </h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="text-gray-500 border-b border-slate-800 text-xs font-black uppercase tracking-widest">
+                                <th class="pb-5">Zaman Damgası</th>
+                                <th class="pb-5">RFID ID</th>
+                                <th class="pb-5 text-center">Ağırlık</th>
+                                <th class="pb-5 text-right">Durum</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-800/50">
+                            <tr class="group hover:bg-white/5 transition">
+                                <td class="py-5 text-sm text-gray-400 font-medium">06.05.2026 | 14:02</td>
+                                <td class="py-5 font-mono text-sky-400 font-bold">#123456</td>
+                                <td class="py-5 text-center font-black text-white">685 kg</td>
+                                <td class="py-5 text-right">
+                                    <span class="px-3 py-1 bg-green-500/10 text-green-400 border border-green-500/20 rounded-full text-[10px] font-black uppercase">Normal</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sağ Taraf: Yönetim ve Kontrol -->
+        <div class="space-y-8">
+            <!-- Hayvan Ekle/Sil Kartı -->
+            <div class="glass-card p-8 border-t-4 border-t-sky-500">
+                <h3 class="text-lg font-black mb-8 text-white tracking-tight uppercase italic">SİSTEM YÖNETİMİ</h3>
+                <div class="space-y-5">
+                    <div>
+                        <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2 block">Hayvan RFID No</label>
+                        <input type="text" class="w-full bg-slate-900/50 border border-slate-700 p-4 rounded-xl focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition text-white font-mono" placeholder="Örn: 900123...">
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2 block">Künye Adı</label>
+                        <input type="text" class="w-full bg-slate-900/50 border border-slate-700 p-4 rounded-xl focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition text-white" placeholder="Örn: Sarıkız">
+                    </div>
+                    <button class="w-full bg-sky-600 hover:bg-sky-500 text-white font-black py-4 rounded-xl shadow-lg shadow-sky-900/40 transition-all transform active:scale-95 uppercase tracking-widest text-xs">
+                        VERİTABANINA EKLE
+                    </button>
+                    <div class="pt-4 border-t border-slate-800">
+                        <button class="w-full bg-transparent border border-red-500/30 text-red-500 hover:bg-red-500 hover:text-white py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">
+                            SİSTEMDEN KAYIT SİL
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Uyarı Paneli -->
+            <div class="glass-card p-8 border-l-4 border-l-yellow-500 bg-yellow-500/5">
+                <div class="flex items-center gap-3 mb-4 text-yellow-500">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h4 class="font-black text-xs uppercase tracking-widest">Akıllı Uyarı</h4>
+                </div>
+                <p class="text-xs text-gray-400 leading-relaxed font-medium">
+                    Sistem, ölçülen vücut sıcaklığı <b class="text-white">39.5°C</b> üzerine çıktığında Nexoria Smart Security protokolü gereği bağlı olan Gmail hesabına anlık bildirim gönderecektir.
+                </p>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
