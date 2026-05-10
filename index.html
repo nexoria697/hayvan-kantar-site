@@ -3,89 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexoria | Otomatik Takip Sistemi</title>
+    <title>Nexoria Agro Core | Sürü Yönetimi</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
-        body { background-color: #0b0f1a; color: #e2e8f0; font-family: 'Inter', sans-serif; }
-        .glass-card { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 1.25rem; }
-        .neon-border { border: 1px solid #38bdf8; box-shadow: 0 0 20px rgba(56, 189, 248, 0.1); }
-        @media print { .no-print { display: none !important; } body { background: white; color: black; } .glass-card { border: 1px solid #000; } }
+        body { background-color: #0b1120; color: #f8fafc; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        .glass-card { background: rgba(30, 41, 59, 0.5); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 1.5rem; }
+        .neon-blue { border-left: 4px solid #38bdf8; box-shadow: -10px 0 20px rgba(56, 189, 248, 0.05); }
+        .neon-green { border-left: 4px solid #22c55e; box-shadow: -10px 0 20px rgba(34, 197, 94, 0.05); }
+        @media print { .no-print { display: none !important; } .print-only { display: block; } body { background: white; color: black; } }
     </style>
 </head>
 <body class="p-4 md:p-8">
 
-    <!-- Üst Menü -->
-    <nav class="flex justify-between items-center mb-8 glass-card p-5 neon-border no-print">
-        <div class="flex items-center gap-4">
-            <i class="fas fa-microchip text-sky-400 text-3xl"></i>
-            <h1 class="text-xl font-black text-white italic">NEXORIA <span class="text-sky-400 underline">AUTO-SYNC</span></h1>
+    <!-- Üst Bar -->
+    <nav class="flex flex-col md:flex-row justify-between items-center mb-8 glass-card p-6 no-print">
+        <div class="flex items-center gap-4 mb-4 md:mb-0">
+            <div class="bg-sky-500 p-3 rounded-2xl shadow-lg shadow-sky-500/20">
+                <i class="fas fa-microchip text-white text-2xl"></i>
+            </div>
+            <div>
+                <h1 class="text-2xl font-black tracking-tighter uppercase">Nexoria <span class="text-sky-400 italic font-light tracking-widest text-sm">Agro Core</span></h1>
+                <p id="sync-status" class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Adafruit Bekleniyor...</p>
+            </div>
         </div>
-        <div class="flex items-center gap-4">
-            <div id="sync-indicator" class="text-[10px] font-bold text-green-400 uppercase bg-green-500/10 px-3 py-1 rounded-full border border-green-500/20">
-                <i class="fas fa-sync fa-spin mr-1"></i> Canlı Senkronize
-            </div>
-            <div class="bg-slate-800 px-4 py-2 rounded-full border border-slate-700 text-sm font-bold">
-                <i class="fab fa-google text-red-400 mr-2"></i> Bilge
-            </div>
+        <div class="flex gap-3">
+            <button onclick="window.print()" class="bg-white text-black px-5 py-2 rounded-xl font-black text-xs hover:bg-sky-400 transition">RAPOR AL (PDF)</button>
         </div>
     </nav>
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
         
-        <!-- Sol: Hayvan Listesi ve Arama -->
+        <!-- Sol Kolon: Yönetim -->
         <div class="space-y-6 no-print">
-            <div class="glass-card p-6">
-                <h3 class="font-black mb-4 uppercase italic text-xs tracking-widest text-sky-400">Kayıtlı Hayvanlar</h3>
-                <!-- Yeni Arama Kutusu (Sorgulama Değil, Filtreleme) -->
-                <div class="relative mb-6">
-                    <i class="fas fa-search absolute left-3 top-3.5 text-gray-500 text-xs"></i>
-                    <input type="text" id="quick-filter" onkeyup="filtrele()" placeholder="İsim veya ID yaz..." class="w-full bg-slate-900/50 border border-slate-700 p-3 pl-10 rounded-xl text-xs focus:border-sky-500 outline-none transition">
-                </div>
-                <div id="animal-list-btns" class="space-y-2 max-h-[500px] overflow-y-auto pr-2">
-                    <!-- Hayvanlar otomatik buraya listelenecek -->
+            
+            <!-- Manuel Hayvan Ekleme -->
+            <div class="glass-card p-6 neon-green">
+                <h3 class="text-xs font-black text-green-400 uppercase tracking-widest mb-4 italic">Hayvan Ekle</h3>
+                <div class="space-y-3">
+                    <input type="text" id="add-rfid" placeholder="RFID Kart No" class="w-full bg-slate-900/50 border border-slate-700 p-3 rounded-xl text-xs focus:border-green-500 outline-none">
+                    <input type="text" id="add-name" placeholder="İnek İsmi" class="w-full bg-slate-900/50 border border-slate-700 p-3 rounded-xl text-xs focus:border-green-500 outline-none">
+                    <button onclick="hayvanEkle()" class="w-full bg-green-500/20 text-green-500 border border-green-500/30 font-black py-3 rounded-xl text-[10px] uppercase hover:bg-green-500 hover:text-white transition">Sisteme Kaydet</button>
                 </div>
             </div>
 
-            <!-- Temizle Butonu -->
-            <button onclick="if(confirm('Tüm verileri silmek istediğine emin misin?')) { localStorage.clear(); location.reload(); }" class="w-full no-print bg-red-500/10 text-red-500 border border-red-500/20 py-3 rounded-xl text-[10px] font-black uppercase hover:bg-red-500 hover:text-white transition">
-                <i class="fas fa-trash-alt mr-2"></i> Veritabanını Boşalt
-            </button>
+            <!-- Sürü Listesi -->
+            <div class="glass-card p-6">
+                <h3 class="text-xs font-black text-gray-400 uppercase tracking-widest mb-4 italic italic">Kayıtlı Sürü</h3>
+                <div id="animal-list" class="space-y-2 max-h-[400px] overflow-y-auto pr-2">
+                    <!-- Dinamik Butonlar -->
+                </div>
+            </div>
         </div>
 
-        <!-- Sağ: Otomatik Veri ve Rapor Alanı -->
-        <div class="lg:col-span-2 space-y-6">
-            <div id="main-display" class="glass-card p-8 neon-border relative overflow-hidden">
-                <!-- Arkaplan Dekoru -->
-                <i class="fas fa-cow absolute -right-10 -bottom-10 text-[200px] text-white/5 rotate-12"></i>
-                
-                <div class="flex justify-between items-start mb-10 relative z-10">
-                    <div>
-                        <p class="text-sky-400 text-xs font-black tracking-[0.3em] uppercase mb-2">Sistemdeki Son Hareket</p>
-                        <h2 id="view-id" class="text-6xl font-mono font-black text-white">#------</h2>
-                        <div class="flex items-center gap-3 mt-3">
-                             <h3 id="view-name" class="text-2xl text-gray-400 font-bold uppercase italic tracking-tighter">Veri Bekleniyor...</h3>
-                             <span id="active-tag" class="hidden px-2 py-0.5 bg-sky-500 text-[10px] font-black text-white rounded">SON OKUNAN</span>
+        <!-- Sağ Kolon: Canlı Veri ve Grafik -->
+        <div class="lg:col-span-3 space-y-6">
+            
+            <!-- Büyük Veri Kartı -->
+            <div id="active-display" class="glass-card p-8 neon-blue relative overflow-hidden">
+                <div class="flex flex-col md:flex-row justify-between gap-6 relative z-10">
+                    <div class="flex-1">
+                        <p class="text-sky-400 text-xs font-black tracking-[0.3em] uppercase mb-1">Seçili Hayvan Dökümü</p>
+                        <h2 id="view-id" class="text-5xl font-mono font-black text-white">#------</h2>
+                        <h3 id="view-name" class="text-2xl text-gray-400 font-bold uppercase mt-1">Veri Bekleniyor</h3>
+                    </div>
+                    
+                    <!-- Anlık Metrikler -->
+                    <div class="flex gap-4">
+                        <div class="bg-slate-900/80 p-6 rounded-2xl border border-slate-800 min-w-[140px] text-center">
+                            <p class="text-[10px] font-black text-gray-500 uppercase mb-2">Güncel Kilo</p>
+                            <span id="last-kg" class="text-3xl font-black text-white">0</span> <span class="text-xs text-sky-400 font-bold">KG</span>
+                        </div>
+                        <div class="bg-slate-900/80 p-6 rounded-2xl border border-slate-800 min-w-[140px] text-center">
+                            <p class="text-[10px] font-black text-gray-500 uppercase mb-2">Vücut Isısı</p>
+                            <span id="last-temp" class="text-3xl font-black text-white">0</span> <span class="text-xs text-red-400 font-bold">°C</span>
                         </div>
                     </div>
-                    <button onclick="window.print()" class="no-print bg-white text-black px-6 py-3 rounded-xl font-black hover:bg-sky-400 transition flex items-center gap-2 shadow-lg shadow-white/10">
-                        <i class="fas fa-print"></i> DÖKÜMANI YAZDIR
-                    </button>
                 </div>
 
-                <div class="relative z-10">
+                <!-- Ölçüm Geçmişi Tablosu -->
+                <div class="mt-12 overflow-x-auto">
                     <table class="w-full text-left">
                         <thead>
                             <tr class="text-gray-500 border-b border-slate-800 text-[10px] font-black uppercase tracking-widest">
-                                <th class="pb-4">Ölçüm Zamanı</th>
-                                <th class="pb-4 text-center">Ağırlık (KG)</th>
-                                <th class="pb-4 text-center">Sıcaklık (°C)</th>
-                                <th class="pb-4 text-right">Sağlık Durumu</th>
+                                <th class="pb-4">Zaman Damgası</th>
+                                <th class="pb-4">Ağırlık (KG)</th>
+                                <th class="pb-4 text-center">Sıcaklık</th>
+                                <th class="pb-4 text-right">Sağlık</th>
                             </tr>
                         </thead>
                         <tbody id="history-table" class="divide-y divide-slate-800/50 text-sm">
-                            <!-- Veriler otomatik dökülecek -->
+                            <!-- Veriler buraya akacak -->
                         </tbody>
                     </table>
                 </div>
@@ -94,102 +103,114 @@
     </div>
 
     <script>
-        // --- AYARLAR ---
+        // --- ADAFRUIT KONFİGÜRASYONU ---
         const AIO_USER = "nexoria697"; 
         const AIO_KEY = "aio_BxZk63aB1YingtcxH9nkykQneqlM"; 
 
+        // Veritabanı
         let db = JSON.parse(localStorage.getItem('nexoria_db')) || {};
+        let activeID = null;
 
-        async function fetchAdafruit() {
-            try {
-                const [resId, resKg, resTemp] = await Promise.all([
-                    fetch(`https://io.adafruit.com/api/v2/${AIO_USER}/feeds/hayvan-id/data/last`, { headers: {'X-AIO-Key': AIO_KEY} }),
-                    fetch(`https://io.adafruit.com/api/v2/${AIO_USER}/feeds/agirlik/data/last`, { headers: {'X-AIO-Key': AIO_KEY} }),
-                    fetch(`https://io.adafruit.com/api/v2/${AIO_USER}/feeds/sicaklik/data/last`, { headers: {'X-AIO-Key': AIO_KEY} })
-                ]);
-
-                const dId = await resId.json();
-                const dKg = await resKg.json();
-                const dTemp = await resTemp.json();
-
-                if(dId.value) {
-                    processData(dId.value, dKg.value, dTemp.value);
-                }
-            } catch (err) {
-                document.getElementById('sync-indicator').innerHTML = '<i class="fas fa-exclamation-triangle text-red-500"></i> Bağlantı Hatası';
+        // Manuel Ekleme
+        function hayvanEkle() {
+            const id = document.getElementById('add-rfid').value.trim();
+            const name = document.getElementById('add-name').value.trim();
+            if(id && name) {
+                if(!db[id]) {
+                    db[id] = { name: name, history: [] };
+                    saveDB();
+                    renderList();
+                    alert("Hayvan başarıyla eklendi!");
+                } else { alert("Bu ID zaten kayıtlı!"); }
             }
         }
 
-        function processData(rfid, kg, temp) {
-            const currentHash = rfid + kg + temp;
-            if(window.lastProcessed === currentHash) return;
-            window.lastProcessed = currentHash;
+        async function pullData() {
+            try {
+                const feeds = ['hayvan-id', 'agirlik', 'sicaklik'];
+                const results = await Promise.all(feeds.map(f => 
+                    fetch(`https://io.adafruit.com/api/v2/${AIO_USER}/feeds/${f}/data/last`, {
+                        headers: {'X-AIO-Key': AIO_KEY}
+                    }).then(r => r.json())
+                ));
+
+                const [idVal, kgVal, tempVal] = results.map(r => r.value);
+
+                if(idVal) {
+                    processIncoming(idVal, kgVal, tempVal);
+                    document.getElementById('sync-status').innerHTML = '<span class="text-green-400">● CANLI VERİ AKIŞI</span>';
+                }
+            } catch (err) {
+                document.getElementById('sync-status').innerText = "Bağlantı Hatası!";
+            }
+        }
+
+        function processIncoming(rfid, kg, temp) {
+            // Veri değişmiş mi kontrolü (Mükerrer kaydı önler)
+            const checkKey = rfid + kg + temp;
+            if(window.lastDataKey === checkKey) return;
+            window.lastDataKey = checkKey;
 
             if(!db[rfid]) {
-                db[rfid] = { name: "İnek " + rfid.slice(-4), history: [] };
+                db[rfid] = { name: "Yeni Hayvan " + rfid.slice(-4), history: [] };
             }
 
             const record = {
-                date: new Date().toLocaleString('tr-TR'),
-                kg: kg || "0",
-                temp: temp || "0",
-                status: parseFloat(temp) > 39.5 ? "KRİTİK" : "STABİL"
+                time: new Date().toLocaleString('tr-TR'),
+                kg: kg,
+                temp: temp,
+                status: parseFloat(temp) > 39.2 ? "KRİTİK" : "NORMAL"
             };
 
-            db[rfid].history.unshift(record);
-            localStorage.setItem('nexoria_db', JSON.stringify(db));
-            
-            // Yeni veri geldiğinde otomatik o hayvanın dökümanını aç
-            updateUI(rfid);
-            renderButtons();
-            
-            // "Son Okunan" etiketi ekle
-            document.getElementById('active-tag').classList.remove('hidden');
+            db[rfid].history.unshift(record); // Her yeni veriyi en başa ekle (Kaydetme burası!)
+            saveDB();
+            renderList();
+            updateDashboard(rfid);
         }
 
-        function updateUI(rfid) {
+        function updateDashboard(rfid) {
+            activeID = rfid;
             const animal = db[rfid];
-            if(!animal) return;
-
             document.getElementById('view-id').innerText = "#" + rfid;
             document.getElementById('view-name').innerText = animal.name;
+            
+            if(animal.history.length > 0) {
+                const last = animal.history[0];
+                document.getElementById('last-kg').innerText = last.kg;
+                document.getElementById('last-temp').innerText = last.temp;
+            }
 
             const table = document.getElementById('history-table');
             table.innerHTML = animal.history.map(h => `
                 <tr class="hover:bg-white/5 transition">
-                    <td class="py-4 font-medium text-gray-400 text-xs">${h.date}</td>
-                    <td class="py-4 text-center font-black text-white text-lg">${h.kg} <span class="text-[10px] text-gray-500">kg</span></td>
-                    <td class="py-4 text-center font-black text-white text-lg">${h.temp} <span class="text-[10px] text-gray-500">°C</span></td>
+                    <td class="py-4 text-gray-400 font-mono text-[11px]">${h.time}</td>
+                    <td class="py-4 font-black text-white text-lg">${h.kg}</td>
+                    <td class="py-4 text-center font-bold text-gray-300 italic">${h.temp}°C</td>
                     <td class="py-4 text-right">
-                        <span class="px-2 py-1 rounded text-[10px] font-black ${h.status === 'KRİTİK' ? 'bg-red-500 text-white animate-pulse' : 'bg-green-500/20 text-green-400 border border-green-500/20'}">${h.status}</span>
+                        <span class="px-3 py-1 rounded-full text-[10px] font-black ${h.status === 'KRİTİK' ? 'bg-red-500 text-white animate-pulse' : 'bg-green-500/20 text-green-400 border border-green-500/20'}">${h.status}</span>
                     </td>
                 </tr>
             `).join('');
         }
 
-        function renderButtons(filter = "") {
-            const container = document.getElementById('animal-list-btns');
-            const keys = Object.keys(db).filter(id => id.includes(filter) || db[id].name.toLowerCase().includes(filter.toLowerCase()));
-            
-            container.innerHTML = keys.map(rfid => `
-                <button onclick="updateUI('${rfid}'); document.getElementById('active-tag').classList.add('hidden');" class="w-full text-left p-4 rounded-xl bg-slate-800/30 border border-slate-700 hover:border-sky-500 transition group flex justify-between items-center">
+        function renderList() {
+            const container = document.getElementById('animal-list');
+            container.innerHTML = Object.keys(db).map(rfid => `
+                <button onclick="updateDashboard('${rfid}')" class="w-full text-left p-4 rounded-2xl bg-slate-800/30 border border-slate-800 hover:border-sky-500 transition group flex justify-between items-center">
                     <div>
-                        <p class="text-[10px] font-mono text-sky-400 font-bold">#${rfid}</p>
+                        <p class="text-[9px] font-mono text-sky-400 font-black tracking-tighter">ID: ${rfid}</p>
                         <p class="text-sm font-bold text-white uppercase tracking-tighter">${db[rfid].name}</p>
                     </div>
-                    <i class="fas fa-chevron-right text-gray-700 group-hover:text-sky-500 transition"></i>
+                    <i class="fas fa-arrow-right text-gray-700 group-hover:text-sky-400 text-xs transition"></i>
                 </button>
             `).join('');
         }
 
-        function filtrele() {
-            const val = document.getElementById('quick-filter').value;
-            renderButtons(val);
-        }
+        function saveDB() { localStorage.setItem('nexoria_db', JSON.stringify(db)); }
 
-        // Başlat
-        setInterval(fetchAdafruit, 5000);
-        renderButtons();
+        // 5 saniyede bir Adafruit kontrolü
+        setInterval(pullData, 5000);
+        renderList();
     </script>
 </body>
 </html>
