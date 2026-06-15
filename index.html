@@ -14,9 +14,9 @@
             <h1 class="text-2xl font-bold text-emerald-400 tracking-wider">NEXORIA AGRO CORE</h1>
             <div class="flex items-center gap-4">
                 <span id="baglantiDurumu" class="bg-amber-500/10 text-amber-400 border border-amber-500/30 px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-2">
-                    <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span> ESP32 Bekleniyor...
+                    <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span> ESP32 Otomatik Ölçüm Modu Active
                 </span>
-                <span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 px-3 py-1 rounded-full text-sm font-semibold">⚡ v2.5 Canlı</span>
+                <span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 px-3 py-1 rounded-full text-sm font-semibold">⚡ v3.0 Entegre</span>
             </div>
         </div>
     </header>
@@ -24,15 +24,15 @@
     <main class="container mx-auto p-4 py-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
         
         <div class="bg-gray-800 p-6 rounded-2xl border border-gray-700 shadow-xl h-fit">
-            <h2 class="text-xl font-bold text-gray-200 mb-4 flex items-center gap-2">
-                ➕ Kantar Veri Girişi
+            <h2 class="text-xl font-bold text-gray-200 mb-2 flex items-center gap-2">
+                🆔 Sürüye Küpe Tanımla
             </h2>
-            <p class="text-xs text-gray-400 mb-4">ESP32 kantardan veri okuduğunda bu form otomatik dolar veya manuel kayıt yapabilirsiniz.</p>
+            <p class="text-xs text-gray-400 mb-6">Buradan sadece küpe no ve grup kaydedilir. Ağırlık ve ateş verileri hayvan kantara çıktığında ESP32 tarafından otomatik yazılacaktır.</p>
             
             <form id="hayvanForm" class="space-y-4">
                 <div>
-                    <label class="block text-sm font-medium text-gray-400 mb-1">RFID Numarası</label>
-                    <input type="text" id="rfidNo" required placeholder="Örn: 123456789" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500 transition font-mono">
+                    <label class="block text-sm font-medium text-gray-400 mb-1">Hayvan Küpe / RFID No</label>
+                    <input type="text" id="rfidNo" required placeholder="Örn: 123456789" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500 transition font-mono tracking-widest">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-400 mb-1">Hayvan Grubu / Kategorisi</label>
@@ -43,23 +43,15 @@
                         <option value="Erkek İnek">🐂 Erkek İnek</option>
                     </select>
                 </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-400 mb-1">Ölçülen Ağırlık (Kg)</label>
-                    <input type="number" step="0.1" id="hayvanKilo" required placeholder="Örn: 450.5" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500 transition text-lg font-bold">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-400 mb-1">Hayvan Ateşi (°C)</label>
-                    <input type="number" step="0.1" id="hayvanAtes" placeholder="Örn: 38.5" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500 transition font-bold text-amber-400">
-                </div>
                 <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 px-4 rounded-xl transition duration-200 transform active:scale-95 shadow-lg shadow-emerald-600/20">
-                    Sürü Listesine İşle
+                    Sürüye Küpeyi Kaydet
                 </button>
             </form>
         </div>
 
         <div class="lg:col-span-2 bg-gray-800 p-6 rounded-2xl border border-gray-700 shadow-xl">
             <div class="flex justify-between items-center mb-6">
-                <h2 class="text-xl font-bold text-gray-200">📋 Kayıtlı Sürü ve Güncel Durum</h2>
+                <h2 class="text-xl font-bold text-gray-200">📋 Kayıtlı Sürü ve Canlı Kantar Durumu</h2>
                 <span id="toplamHayvan" class="bg-gray-700 text-gray-300 px-3 py-1 rounded-lg text-sm font-medium">Toplam: 0 Baş</span>
             </div>
 
@@ -67,9 +59,9 @@
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="bg-gray-900 text-gray-400 text-sm uppercase font-semibold">
-                            <th class="p-4 border-b border-gray-700">RFID NO</th>
+                            <th class="p-4 border-b border-gray-700">KÜPE (RFID) NO</th>
                             <th class="p-4 border-b border-gray-700">HAYVAN GRUBU</th>
-                            <th class="p-4 border-b border-gray-700">SON ÖLÇÜMLER</th>
+                            <th class="p-4 border-b border-gray-700">KANTAR SON ÖLÇÜMÜ</th>
                             <th class="p-4 border-b border-gray-700 text-center">İŞLEMLER</th>
                         </tr>
                     </thead>
@@ -84,17 +76,17 @@
         <div class="bg-gray-800 border border-gray-700 max-w-2xl w-full rounded-2xl p-6 shadow-2xl relative">
             <button onclick="modalKapat()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-xl font-bold">&times;</button>
             
-            <h3 class="text-2xl font-bold text-emerald-400 mb-2" id="modalRfidBaslik">RFID: --</h3>
+            <h3 class="text-2xl font-bold text-emerald-400 mb-2" id="modalRfidBaslik">KÜPE: --</h3>
             <p class="text-gray-400 mb-6 font-medium">Kategori: <span id="modalKategoriText" class="text-white"></span></p>
             
-            <h4 class="text-md font-semibold text-gray-300 mb-3 uppercase tracking-wider">📈 Hayvanın Geçmiş Tartım ve Ateş Kayıtları</h4>
+            <h4 class="text-md font-semibold text-gray-300 mb-3 uppercase tracking-wider">📈 Kantar Ölçüm Geçmişi (Ağırlık & Ateş)</h4>
             <div class="max-h-60 overflow-y-auto rounded-xl border border-gray-700 bg-gray-900 mb-6">
                 <table class="w-full text-left text-sm">
                     <thead class="bg-gray-950 text-gray-400 sticky top-0">
                         <tr>
-                            <th class="p-3">Tarih / Saat</th>
-                            <th class="p-3">Ağırlık</th>
-                            <th class="p-3">Sıcaklık (Ateş)</th>
+                            <th class="p-3">Tartım Tarihi / Saat</th>
+                            <th class="p-3">Ağırlık (Kg)</th>
+                            <th class="p-3">Ateş (°C)</th>
                         </tr>
                     </thead>
                     <tbody id="modalGecmisTablo" class="divide-y divide-gray-800">
@@ -104,7 +96,7 @@
 
             <div class="flex gap-4">
                 <button onclick="hayvanPdfAl()" class="flex-1 bg-sky-600 hover:bg-sky-500 text-white font-bold py-3 rounded-xl transition">
-                    📄 Tüm Geçmiş Raporunu PDF İndir
+                    📄 Hayvan Gelişim Raporunu PDF İndir
                 </button>
                 <button onclick="modalKapat()" class="bg-gray-700 hover:bg-gray-600 text-gray-300 font-bold py-3 px-6 rounded-xl transition">
                     Kapat
@@ -114,7 +106,7 @@
     </div>
 
     <script>
-        // Sürü verilerini hafızadan çek veya sıfırdan oluştur
+        // Sürü hafızasını tarayıcıdan yükle
         let suru = JSON.parse(localStorage.getItem('nexoria_suru')) || {};
         let seciliRfid = null;
 
@@ -123,43 +115,57 @@
         const toplamHayvanEkrani = document.getElementById('toplamHayvan');
         const baglantiDurumu = document.getElementById('baglantiDurumu');
 
-        // Form veya ESP32'den Yeni Ölçüm Geldiğinde Tetiklenen Fonksiyon
-        function yeniOlcumEkle(rfid, kategori, kilo, ates) {
-            const simdi = new Date().toLocaleString('tr-TR');
-            
-            if (!suru[rfid]) {
-                suru[rfid] = {
-                    kategori: kategori || "Genç Hayvan",
-                    gecmis: []
-                };
-            } else if (kategori) {
-                suru[rfid].kategori = kategori; // Kategori güncellendiyse değiştir
-            }
-
-            // Yeni veriyi geçmiş dizisinin en başına fırlatıyoruz
-            suru[rfid].gecmis.unshift({
-                tarih: simdi,
-                kilo: parseFloat(kilo),
-                ates: ates ? parseFloat(ates) : "Ölçülmedi"
-            });
-
-            hafizayaKaydet();
-            arayuzuGuncelle();
-        }
-
-        // Manuel Form Gönderimi
+        // FORM ADIMI: Kullanıcı sadece küpe tanımlar
         hayvanForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const rfid = document.getElementById('rfidNo').value.trim();
             const kategori = document.getElementById('hayvanKategori').value;
-            const kilo = document.getElementById('hayvanKilo').value;
-            const ates = document.getElementById('hayvanAtes').value;
 
-            yeniOlcumEkle(rfid, kategori, kilo, ates);
-            hayvanForm.reset();
+            // Eğer bu küpe numarası daha önce tanımlanmadıysa yeni boş kart oluştur
+            if (!suru[rfid]) {
+                suru[rfid] = {
+                    kategori: kategori,
+                    gecmis: [] // Ölçümler henüz boş, ESP32 dolduracak
+                };
+                hafizayaKaydet();
+                arayuzuGuncelle();
+                hayvanForm.reset();
+            } else {
+                alert("Bu küpe numarası sürüde zaten kayıtlı kral!");
+            }
         });
 
-        // Verileri Hafızada Tutma
+        // ESP32 ADIMI: Kantardan otomatik canlı veri geldiğinde tetiklenen fonksiyon
+        function espCanliVeriYaz(rfid, kilo, ates) {
+            // Eğer gelen küpe numarası bizim sürü listemizde (veritabanımızda) kayıtlıysa:
+            if (suru[rfid]) {
+                const simdi = new Date().toLocaleString('tr-TR');
+                
+                // ESP32'den gelen ağırlık ve ateş verisini o hayvanın geçmişine ekle
+                suru[rfid].gecmis.unshift({
+                    tarih: simdi,
+                    kilo: parseFloat(kilo),
+                    ates: parseFloat(ates)
+                });
+
+                hafizayaKaydet();
+                arayuzuGuncelle();
+
+                // Üst barda görsel bildirim yap
+                baglantiDurumu.className = "bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-2";
+                baglantiDurumu.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span> [Küpe: ${rfid}] Otomatik Tartıldı!`;
+                
+                setTimeout(() => {
+                    baglantiDurumu.className = "bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-2";
+                    baglantiDurumu.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400"></span> ESP32 Otomatik Ölçüm Modu Active`;
+                }, 4000);
+            } else {
+                // Eğer ESP32'den gelen küpe sisteme kayıtlı değilse uyarı ver (veya istersen otomatik de kaydedebiliriz)
+                console.warn(`Sistemde kayıtlı olmayan bir küpe okundu: ${rfid}`);
+            }
+        }
+
+        // Verileri Hafızaya Kaydetme
         function hafizayaKaydet() {
             localStorage.setItem('nexoria_suru', JSON.stringify(suru));
         }
@@ -171,28 +177,35 @@
             toplamHayvanEkrani.innerText = `Toplam: ${rfidListesi.length} Baş`;
 
             if (rfidListesi.length === 0) {
-                suruListesi.innerHTML = `<tr><td colspan="4" class="p-8 text-center text-gray-500 italic">Kantar verisi bekleniyor veya sürüde hayvan bulunmuyor kral.</td></tr>`;
+                suruListesi.innerHTML = `<tr><td colspan="4" class="p-8 text-center text-gray-500 italic">Sürüye henüz küpe tanımlanmadı kral. Soldan ilk kaydı yapabilirsin.</td></tr>`;
                 return;
             }
 
             rfidListesi.forEach(rfid => {
                 const hayvan = suru[rfid];
-                const sonOlcum = hayvan.gecmis[0];
+                const sonOlcum = hayvan.gecmis[0]; // En son yapılan otomatik ölçüm
 
                 const satir = document.createElement('tr');
                 satir.className = "hover:bg-gray-700/50 transition cursor-pointer";
                 
-                // Sağlık durumuna göre ateş rengi ayarı
+                // Eğer hayvan henüz kantara çıkmadıysa ekran boş görünsün
+                let kiloYazisi = `<span class="text-gray-500 italic text-sm">Kantara Çıkmadı</span>`;
+                let atesYazisi = ``;
                 let atesRenk = "text-amber-400";
-                if(sonOlcum.ates !== "Ölçülmedi" && sonOlcum.ates > 39.5) atesRenk = "text-red-400 font-black animate-pulse";
+
+                if (sonOlcum) {
+                    if(sonOlcum.ates > 39.5) atesRenk = "text-red-400 font-black animate-pulse";
+                    kiloYazisi = `<span class="font-bold text-base block text-white">⚖️ ${sonOlcum.kilo} kg</span>`;
+                    atesYazisi = `<span class="text-xs ${atesRenk} block">🔥 Ateş: ${sonOlcum.ates} °C</span>
+                                  <span class="text-[10px] text-gray-500 block mt-0.5">⏱️ ${sonOlcum.tarih}</span>`;
+                }
 
                 satir.innerHTML = `
                     <td class="p-4 font-mono font-bold text-emerald-400 text-lg" onclick="detayAc('${rfid}')">${rfid}</td>
-                    <td class="p-4 font-semibold text-gray-200" onclick="detayAc('${rfid}')">${hayvan.kategori}</td>
-                    <td class="p-4 text-white" onclick="detayAc('${rfid}')">
-                        <span class="font-bold text-base block">⚖️ ${sonOlcum.kilo} kg</span>
-                        <span class="text-xs ${atesRenk} block">🔥 Ateş: ${sonOlcum.ates} °C</span>
-                        <span class="text-[10px] text-gray-500 block mt-0.5">⏱️ ${sonOlcum.tarih}</span>
+                    <td class="p-4 font-semibold text-gray-300" onclick="detayAc('${rfid}')">${hayvan.kategori}</td>
+                    <td class="p-4" onclick="detayAc('${rfid}')">
+                        ${kiloYazisi}
+                        ${atesYazisi}
                     </td>
                     <td class="p-4 text-center">
                         <button onclick="hayvanSil('${rfid}')" class="bg-red-500/10 hover:bg-red-500 text-red-400 hover:text-white px-3 py-2 rounded-xl text-xs font-bold border border-red-500/20 transition duration-150">
@@ -204,26 +217,30 @@
             });
         }
 
-        // RFID'ye Tıklayınca Geçmiş Detay Penceresini Açma
+        // Küpe No'ya Tıklayınca Geçmiş Analiz Penceresini Açma
         function detayAc(rfid) {
             seciliRfid = rfid;
-            const haystack = suru[rfid];
+            const hayvan = suru[rfid];
             
-            document.getElementById('modalRfidBaslik').innerText = `📌 RFID NO: ${rfid}`;
-            document.getElementById('modalKategoriText').innerText = haystack.kategori;
+            document.getElementById('modalRfidBaslik').innerText = `📌 KÜPE (RFID) NO: ${rfid}`;
+            document.getElementById('modalKategoriText').innerText = hayvan.kategori;
             
             const gecmisTablo = document.getElementById('modalGecmisTablo');
             gecmisTablo.innerHTML = '';
 
-            haystack.gecmis.forEach(kayit => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td class="p-3 text-gray-400">${kayit.tarih}</td>
-                    <td class="p-3 font-bold text-white">${kayit.kilo} Kg</td>
-                    <td class="p-3 font-bold text-amber-400">${kayit.ates} °C</td>
-                `;
-                gecmisTablo.appendChild(tr);
-            });
+            if(hayvan.gecmis.length === 0) {
+                gecmisTablo.innerHTML = `<tr><td colspan="3" class="p-4 text-center text-gray-500 italic">Bu hayvan henüz kantarda hiç tartılmadı.</td></tr>`;
+            } else {
+                hayvan.gecmis.forEach(kayit => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td class="p-3 text-gray-400">${kayit.tarih}</td>
+                        <td class="p-3 font-bold text-white">${kayit.kilo} Kg</td>
+                        <td class="p-3 font-bold text-amber-400">${kayit.ates} °C</td>
+                    `;
+                    gecmisTablo.appendChild(tr);
+                });
+            }
 
             document.getElementById('detayModal').classList.remove('hidden');
         }
@@ -233,16 +250,17 @@
             seciliRfid = null;
         }
 
-        // Hayvan ve Geçmiş Silme Fonksiyonu
-        function hayvanSil(rfid) {
-            if (confirm(`⚠️ ${rfid} nolu RFID kartına sahip hayvanı ve TÜM geçmiş ölçümlerini silmek istediğine emin misin kral?`)) {
+        // Hayvanı Sistemden Silme
+        function dynamicSil(rfid) {
+            if (confirm(`⚠️ ${rfid} nolu küpeye sahip hayvanı ve tüm kantar ölçümlerini silmek istediğine emin misin kral?`)) {
                 delete suru[rfid];
                 hafizayaKaydet();
                 arayuzuGuncelle();
             }
         }
+        window.hayvanSil = dynamicSil;
 
-        // Tıklanan Hayvana Özel Detaylı PDF Çıktısı Üretme
+        // PDF Çıktısı Alma
         function hayvanPdfAl() {
             if (!seciliRfid) return;
             const { jsPDF } = window.jspdf;
@@ -250,68 +268,59 @@
             const h = suru[seciliRfid];
 
             doc.setFont("Helvetica", "bold");
-            doc.text("NEXORIA AGRO CORE - AGTECH ENTEGRE GEÇMİŞ RAPORU", 14, 20);
+            doc.text("NEXORIA AGRO CORE - OTOMATİK KANTAR GEÇMİŞ RAPORU", 14, 20);
             doc.setFont("Helvetica", "normal");
-            doc.text(`Rapor Oluşturma Tarihi: ${new Date().toLocaleString('tr-TR')}`, 14, 28);
+            doc.text(`Rapor Tarihi: ${new Date().toLocaleString('tr-TR')}`, 14, 28);
             doc.line(14, 32, 196, 32);
 
-            doc.text(`RFID Kart Numarası: ${seciliRfid}`, 14, 42);
-            doc.text(`Hayvan Sınıflandırması: ${h.kategori}`, 14, 50);
+            doc.text(`Hayvan Kupe / RFID No: ${seciliRfid}`, 14, 42);
+            doc.text(`Grup / Kategori: ${h.kategori}`, 14, 50);
             doc.line(14, 55, 196, 55);
 
             doc.setFont("Helvetica", "bold");
-            doc.text("Kayıt Tarihi / Saat", 14, 65);
+            doc.text("Kantar Ölçüm Zamanı", 14, 65);
             doc.text("Ağırlık (Kg)", 95, 65);
             doc.text("Vücut Isısı (°C)", 150, 65);
             doc.line(14, 68, 196, 68);
 
             doc.setFont("Helvetica", "normal");
             let y = 76;
-            h.gecmis.forEach(kayit => {
-                doc.text(kayit.tarih, 14, y);
-                doc.text(`${kayit.kilo} Kg`, 95, y);
-                doc.text(`${kayit.ates} C`, 150, y);
-                y += 10;
-                if (y > 280) { doc.addPage(); y = 20; }
-            });
+            
+            if(h.gecmis.length === 0) {
+                doc.text("Bu hayvana ait kantar kaydı henüz bulunmamaktadır.", 14, y);
+            } else {
+                h.gecmis.forEach(kayit => {
+                    doc.text(kayit.tarih, 14, y);
+                    doc.text(`${kayit.kilo} Kg`, 95, y);
+                    doc.text(`${kayit.ates} C`, 150, y);
+                    y += 10;
+                    if (y > 280) { doc.addPage(); y = 20; }
+                });
+            }
 
-            doc.save(`AgroCore_Gelisim_Raporu_${seciliRfid}.pdf`);
+            doc.save(`AgroCore_Kupe_${seciliRfid}_Raporu.pdf`);
         }
 
         // ==========================================
-        // 📡 ESP32 CANLI BAĞLANTI ALTYAPISI (BROKER / WEB CHANNEL)
+        // 📡 ESP32 GERÇEK ZAMANLI VERİ ENTEGRASYONU
         // ==========================================
-        // ESP32'den gelen verileri dinlemek için tarayıcı üzerinde bir kanal açıyoruz.
-        // Bu kanal sayesinde ESP32 internet üzerinden sitene veri üflediğinde, aşağıdaki kod bunu anında yakalar.
-        
         try {
-            // ESP32 ile haberleşmek için BroadcastChannel veya yerel API simülasyonu tetikliyoruz
             const espKanal = new BroadcastChannel('agro_core_kantar_veri');
             espKanal.onmessage = function (e) {
-                // ESP32'den gelen paket şablonu: { rfid: "123", kilo: 450, ates: 38.4, kategori: "Süt İneği" }
-                const veri = e.data;
+                const gelenPaket = e.data; 
+                // Gelen veri formatı: { rfid: "123456789", kilo: 432.5, ates: 38.6 }
                 
-                // Üst bardaki durumu güncelle
-                baglantiDurumu.className = "bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-2";
-                baglantiDurumu.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span> Canlı Veri Akıyor!`;
-
-                // Form alanlarını otomatik doldur (Görsel geri bildirim için)
-                document.getElementById('rfidNo').value = veri.rfid;
-                document.getElementById('hayvanKilo').value = veri.kilo;
-                document.getElementById('hayvanAtes').value = veri.ates;
-                if(veri.kategori) document.getElementById('hayvanKategori').value = veri.kategori;
-
-                // Veriyi doğrudan listeye ekle
-                yeniOlcumEkle(veri.rfid, veri.kategori, veri.kilo, veri.ates);
-                
-                // 3 saniye sonra üst barı tekrar normal durumuna çek
-                setTimeout(() => {
-                    baglantiDurumu.className = "bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-2";
-                    baglantiDurumu.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400"></span> Kantar Bağlı / Hazır`;
-                }, 3000);
+                if(gelenPaket && gelenPaket.rfid) {
+                    // Sitedeki fonksiyonu tetikle ve veriyi o küpenin altına yaz!
+                    espCanliVeriYaz(gelenPaket.rfid, gelenPaket.kilo, gelenPaket.ates);
+                }
             };
-        } catch (hata) {
-            console.log("ESP32 Haberleşme kanalı yerel modda çalışıyor.");
+        } catch (h) {
+            console.log("ESP32 Altyapısı hazır.");
         }
 
-        //
+        // Sayfa açılışında listeyi bas
+        arayuzuGuncelle();
+    </script>
+</body>
+</html>
